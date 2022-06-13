@@ -71,5 +71,5 @@ export function handleItemListed(event: ItemListedEvent): void {
   activeItem.price = event.params.price;
 
   itemListed.save();
-  activeItem!.save();
+  activeItem.save();
 }
