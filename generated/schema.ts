@@ -42,13 +42,21 @@ export class ActiveItem extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get buyer(): Bytes {
+  get buyer(): Bytes | null {
     let value = this.get("buyer");
-    return value!.toBytes();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set buyer(value: Bytes) {
-    this.set("buyer", Value.fromBytes(value));
+  set buyer(value: Bytes | null) {
+    if (!value) {
+      this.unset("buyer");
+    } else {
+      this.set("buyer", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get seller(): Bytes {
@@ -221,21 +229,13 @@ export class ItemCanceled extends Entity {
     this.set("nftAddress", Value.fromBytes(value));
   }
 
-  get tokenId(): BigInt | null {
+  get tokenId(): BigInt {
     let value = this.get("tokenId");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value!.toBigInt();
   }
 
-  set tokenId(value: BigInt | null) {
-    if (!value) {
-      this.unset("tokenId");
-    } else {
-      this.set("tokenId", Value.fromBigInt(<BigInt>value));
-    }
+  set tokenId(value: BigInt) {
+    this.set("tokenId", Value.fromBigInt(value));
   }
 }
 
